@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  name          String
+  email         String   @unique
+  password_hash String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  posts         Post[]
+  examples      DesignExample[]
+  config        UserConfig?
+
+  @@map("users")
+}
+
+model DesignExample {
+  id         Int      @id @default(autoincrement())
+  image_url  String
+  origem     String   @default("UPLOAD") // UPLOAD or GENERATED
+  favorito   Boolean  @default(false)
+  patterns   Json?    // Structured design analysis (colors, safe zones)
+  vibe       String?  // Qualitative description
+  user       User     @relation(fields: [user_id], references: [id])
+  user_id    Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([user_id, favorito])
+  @@index([user_id, origem])
+  @@map("design_examples")
+}
+
+model UserConfig {
+  id              Int    @id @default(autoincrement())
+  training_source String @default("BOTH") // UPLOADED, FAVORITED, BOTH
+  user            User   @relation(fields: [user_id], references: [id])
+  user_id         Int    @unique
+  updated_at      DateTime @updatedAt
+
+  @@map("user_configs")
+}
+
+model Post {
+  id         Int      @id @default(autoincrement())
+  tema       String
+  estilo     String   // dor, educativo, venda
+  conteudo   Json     // { slides: Array<{ titulo, texto, cor_fundo? }> }
+  legenda    String
+  status     String   @default("gerado") // gerado, aprovado, rejeitado
+  favorito   Boolean  @default(false)
+  qualidade  Int?     @default(0)
+  user       User     @relation(fields: [user_id], references: [id])
+  user_id    Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([user_id, created_at(sort: Desc)])
+  @@index([user_id, status])
+  @@index([user_id, favorito])
+  @@map("posts")
+}
