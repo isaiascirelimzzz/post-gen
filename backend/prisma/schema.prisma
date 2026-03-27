@@ -27,6 +27,7 @@ model DesignExample {
   favorito   Boolean  @default(false)
   patterns   Json?    // Structured design analysis (colors, safe zones)
   vibe       String?  // Qualitative description
+  doc_type   String
   user       User     @relation(fields: [user_id], references: [id])
   user_id    Int
   created_at DateTime @default(now())

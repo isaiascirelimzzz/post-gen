@@ -30,9 +30,9 @@ async function generateImage(prompt: string): Promise<string> {
 }
 
 export async function generateAIContent(
-  tema: string, 
-  estilo: string, 
-  contentExamples: any[] = [], 
+  tema: string,
+  estilo: string,
+  contentExamples: any[] = [],
   styleExamples: any[] = []
 ) {
   if (!env.OPENAI_API_KEY || env.OPENAI_API_KEY === 'sk-seu-token-aqui') {
@@ -40,7 +40,7 @@ export async function generateAIContent(
     return fallbackGeneration(tema, estilo)
   }
 
-  const contentPrompt = contentExamples.length > 0 
+  const contentPrompt = contentExamples.length > 0
     ? `Use estes posts como referência de CONTEÚDO e TOM:\n${JSON.stringify(contentExamples, null, 2)}`
     : ''
 
@@ -61,9 +61,9 @@ export async function generateAIContent(
     3. O último slide é o CTA (Chamada para ação).
 
     Instruções de Design (Trate o slide como um grid 100x100):
-    1. Para cada slide, defina as coordenadas (x, y) de 0 a 100 para o título e o texto.
+    1. Para cada slide, defina as coordenadas (x, y) de 15 a 85 para o título e o texto.
        IMPORTANTE: Se houver padrões visuais nos exemplos de treinamento (typical_text_zones), tente segui-los para manter a consistência.
-    2. Escolha cores (hex) com alto contraste do fundo. Se houver color_palette nos exemplos, dê preferência a essas cores.
+    2. Escolha cores (hex) com alto contraste entre o fundo e o texto. Se houver color_palette nos exemplos, dê preferência a essas cores.
     3. TIPOGRAFIA (CRÍTICO): Você DEVE ter liberdade criativa. NÃO use sempre "Inter" ou "Montserrat". Escolha um par de fontes (título e texto) que combine perfeitamente com a personalidade do "estilo" e do "tema".
        - Fontes de Título Sugeridas (Impacto): "Bebas Neue", "Anton", "Oswald", "Righteous", "Fjalla One", "Teko", "Cinzel", "Playfair Display", "Pacifico", "Caveat".
        - Fontes de Texto Sugeridas (Leitura): "Roboto", "Open Sans", "Lato", "Poppins", "Nunito", "Quicksand", "Work Sans", "Rubik", "Lora".
@@ -91,7 +91,7 @@ export async function generateAIContent(
 
   try {
     const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
-      { role: 'system', content: 'Você é um Diretor de Arte Sênior especializado em Instagram Reels e Carrosséis.' },
+      { role: 'system', content: 'Você é um Diretor de Arte Sênior e Designer Gráfico especializado em Instagram Reels e Carrosséis.' },
       { role: 'user', content: prompt }
     ]
 
@@ -168,17 +168,17 @@ export async function analyzeDesignStyle(imagePath: string) {
         {
           role: 'user',
           content: [
-            { 
-              type: 'text', 
+            {
+              type: 'text',
               text: `Analyze this social media post design carefully. 
               Extract the following patterns in JSON format:
-              - typical_text_zones: { titulo: { x, y }, texto: { x, y } } (coordinates 0-100)
+              - typical_text_zones: { titulo: { x, y }, texto: { x, y } } (coordinates 15-85)
               - color_palette: string[] (hex codes)
               - preferred_font_styles: string (e.g. "bold", "minimalist", "serif")
               - text_density: "low" | "medium" | "high"
               - visual_vibe: string (general description of the aesthetic)
               
-              Respond ONLY with the JSON object.` 
+              Respond ONLY with the JSON object.`
             },
             {
               type: 'image_url',
@@ -205,9 +205,9 @@ export async function analyzeDesignStyle(imagePath: string) {
 function fallbackGeneration(tema: string, estilo: string) {
   return {
     slides: [
-      { 
-        titulo: tema, 
-        texto: 'Este é um post gerado localmente (fallback).', 
+      {
+        titulo: tema,
+        texto: 'Este é um post gerado localmente (fallback).',
         cor_fundo: 'linear-gradient(135deg, #1a0a1e 0%, #2d1040 40%, #1a1d24 100%)',
         layout: {
           titulo: { x: 50, y: 40, fontSize: 40, color: '#ffffff', textAlign: 'center', fontFamily: 'Montserrat' },

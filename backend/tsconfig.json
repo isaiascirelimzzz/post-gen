@@ -8,12 +8,22 @@
     "strict": true,
     "skipLibCheck": true,
     "outDir": "dist",
-    "types": ["node"],
+    "types": [
+      "node"
+    ],
     "baseUrl": ".",
     "paths": {
-      "@prisma/client": ["../node_modules/@prisma/client"]
+      "@prisma/client": [
+        "../node_modules/@prisma/client"
+      ]
     }
   },
-  "include": ["src/**/*", "prisma.config.ts", "prisma/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src/**/*",
+    "prisma.config.ts",
+    "prisma/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
